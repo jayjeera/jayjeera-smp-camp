@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SMP Camp — รวมค่ายเข้ามหาวิทยาลัย by Smart Math Pro</title>
+<link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+:root{
+  --blue:#1595FE;--blue-ink:#0A74D6;--blue-d:#222;--blue-l:#EAF6FF;--yellow:#FFD502;--yellow-d:#D4AE00;--yellow-l:#FFFBE0;
+  --math-blue:#20B8F1;
+  --ink:#222;--muted:#66727F;--line:#E3EDF6;--red:#EF4444;--bg:#F6FAFE;
+  --shadow:0 10px 30px rgba(21,60,100,.08);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{font-family:'Prompt',sans-serif;color:var(--ink);background:var(--bg);line-height:1.5}
+a{color:inherit;text-decoration:none}
+button{font-family:inherit;cursor:pointer;border:none;background:none;color:inherit}
+.container{max-width:1240px;margin:0 auto;padding:0 20px}
+.muted{color:var(--muted)}
+
+/* ---------- Top bar ---------- */
+.topbar{background:var(--blue-l);color:var(--muted);font-size:13px}
+.topbar-in{display:flex;justify-content:space-between;align-items:center;height:36px;gap:16px}
+.topbar b{color:var(--blue-ink)}
+.topbar-links{display:flex;gap:18px}
+.topbar-links a:hover{color:var(--blue-ink)}
+
+/* ---------- Header ---------- */
+.header{background:#fff;position:sticky;top:0;z-index:60;box-shadow:0 2px 14px rgba(21,60,100,.06)}
+.header-top{display:flex;align-items:center;gap:24px;height:80px}
+.logo{display:flex;align-items:center;gap:12px;flex-shrink:0}
+.logo img{height:44px;width:auto}
+.search-wrap{flex:1;max-width:540px;position:relative;margin-left:auto}
+.search-wrap input{width:100%;height:46px;border:2px solid var(--line);border-radius:999px;padding:0 20px 0 46px;font-family:inherit;font-size:15px;background:var(--bg);outline:none;transition:.2s}
+.search-wrap input:focus{border-color:var(--blue);background:#fff}
+.s-ico{position:absolute;left:17px;top:50%;transform:translateY(-50%);color:var(--muted)}
+.search-results{position:absolute;top:54px;left:0;right:0;background:#fff;border-radius:16px;box-shadow:0 20px 40px rgba(21,60,100,.15);display:none;overflow:hidden;border:1px solid var(--line)}
+.search-results.show{display:block}
+.sr-item{display:flex;gap:12px;align-items:center;padding:10px 14px;cursor:pointer}
+.sr-item:hover{background:var(--blue-l)}
+.sr-item b{display:block;font-size:14px;font-weight:600}
+.sr-item small{font-size:12px;color:var(--muted)}
+.sr-thumb{width:42px;height:42px;border-radius:10px;display:grid;place-items:center;font-size:22px;flex-shrink:0}
+.sr-all,.sr-empty{padding:12px 16px;font-size:13.5px;color:var(--blue-ink);font-weight:600;border-top:1px solid var(--line);cursor:pointer}
+.sr-empty{color:var(--muted);font-weight:400}
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;height:46px;padding:0 22px;border-radius:999px;font-weight:600;font-size:15px;transition:.2s;white-space:nowrap}
+.btn-yellow{background:var(--yellow);color:var(--blue-d);box-shadow:0 4px 0 var(--yellow-d);font-weight:700}
+.btn-yellow:hover{transform:translateY(-2px);box-shadow:0 6px 0 var(--yellow-d)}
+.btn-blue{background:var(--blue-ink);color:#fff}
+.btn-blue:hover{background:#0860B0}
+.btn-outline{border:2px solid var(--blue);color:var(--blue-ink);background:#fff}
+.btn-outline:hover{background:var(--blue-l)}
+.btn-ghost{background:var(--bg);color:var(--ink)}
+.burger{display:none;font-size:26px;width:46px;height:46px;border-radius:12px;background:var(--blue-l);color:var(--blue-ink)}
+
+/* ---------- Nav ---------- */
+.navbar{background:#fff;border-top:1px solid var(--line)}
+.nav{display:flex;align-items:center;justify-content:space-between}
+.nav-list{display:flex;list-style:none}
+.nav-item{position:relative}
+.nav-link{display:flex;align-items:center;gap:8px;color:var(--ink);font-weight:500;font-size:15px;padding:0 16px;height:52px}
+.nav-item:hover>.nav-link{background:var(--blue-l);color:var(--blue-ink)}
+.chev{width:6px;height:6px;border-right:2px solid currentColor;border-bottom:2px solid currentColor;transform:rotate(45deg) translateY(-2px);transition:.2s;display:inline-block}
+.dd-menu{position:absolute;top:100%;left:0;background:#fff;min-width:250px;border-radius:0 0 16px 16px;box-shadow:0 20px 40px rgba(21,60,100,.15);padding:10px;display:none;border-top:4px solid var(--yellow);z-index:5}
+.dd-menu.cols-2{min-width:470px;grid-template-columns:1fr 1fr;gap:2px}
+.dd-menu a{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:10px;font-size:14px;color:var(--ink)}
+.dd-menu a:hover{background:var(--blue-l);color:var(--blue-ink)}
+.dd-menu .cnt{margin-left:auto;font-size:11px;background:var(--yellow-l);color:#8A6D00;border-radius:999px;padding:0 8px;font-weight:600}
+@media(min-width:961px){
+  .nav-item:hover .dd-menu{display:block}
+  .nav-item:hover .dd-menu.cols-2{display:grid}
+  .nav-item:hover .chev{transform:rotate(225deg)}
+}
+.nav-cal{background:var(--yellow);color:var(--blue-d);font-weight:700;border-radius:999px;padding:8px 18px;display:flex;gap:6px;align-items:center;font-size:14px;transition:.2s}
+.nav-cal:hover{transform:translateY(-2px)}
+
+/* ---------- Hero ---------- */
+.hero{background:radial-gradient(circle at 88% 12%,rgba(255,213,2,.30),transparent 38%),linear-gradient(135deg,#0E84EE 0%,#1595FE 55%,#28A8FF 100%);color:#fff;padding:56px 0 96px;position:relative;overflow:hidden}
+.hero::before{content:'';position:absolute;inset:0;background-image:radial-gradient(rgba(255,255,255,.1) 1.5px,transparent 1.5px);background-size:26px 26px;mask-image:linear-gradient(90deg,transparent,#000 70%)}
+.hero::after{content:'';position:absolute;left:0;right:0;bottom:-1px;height:64px;pointer-events:none;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 80' preserveAspectRatio='none'%3E%3Cpath d='M0 42C240 92 480 0 720 36S1200 84 1440 30V80H0Z' fill='%23FFD502'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+.hero-in{display:grid;grid-template-columns:1.1fr 1fr;gap:48px;align-items:center;position:relative}
+.pill{display:inline-block;background:rgba(255,255,255,.2);border:1px solid rgba(255,255,255,.25);padding:6px 14px;border-radius:999px;font-size:13.5px}
+.hero h1{font-size:42px;line-height:1.25;font-weight:800;margin:16px 0 12px}
+.hl{color:var(--yellow)}
+.hero p.lead{color:rgba(255,255,255,.95);font-size:16.5px;max-width:530px}
+.hero-search{display:flex;background:#fff;border-radius:18px;padding:8px;gap:6px;margin-top:26px;box-shadow:0 20px 40px rgba(0,0,0,.2);align-items:center}
+.hero-search select,.hero-search input{border:none;outline:none;font-family:inherit;font-size:14px;color:var(--ink);background:transparent;padding:0 10px;height:44px}
+.hero-search select{border-right:1px solid var(--line);cursor:pointer}
+.hero-search input{flex:1;min-width:0}
+.quick-tags{margin-top:16px;display:flex;flex-wrap:wrap;gap:8px;font-size:14px;align-items:center;color:rgba(255,255,255,.92)}
+.quick-tags button{color:#fff;background:rgba(255,255,255,.1);padding:4px 12px;border-radius:999px;font-size:13px;border:1px solid rgba(255,255,255,.2)}
+.quick-tags button:hover{background:var(--yellow);color:var(--blue-d)}
+.stats{display:flex;gap:36px;margin-top:30px}
+.stats b{display:block;font-size:28px;color:var(--yellow);line-height:1.2}
+.stats span{font-size:13px;color:rgba(255,255,255,.92)}
+.slider-wrap{position:relative}
+.slider{position:relative;border-radius:26px;overflow:hidden;aspect-ratio:4/3.1;box-shadow:0 30px 60px rgba(0,0,0,.3);border:4px solid rgba(255,255,255,.2)}
+.slide{position:absolute;inset:0;opacity:0;transition:opacity .7s;display:flex;flex-direction:column;justify-content:flex-end;padding:32px;cursor:pointer;visibility:hidden}
+.slide.active{opacity:1;visibility:visible}
+.slide .big{position:absolute;font-size:150px;top:24px;right:34px;filter:drop-shadow(0 20px 30px rgba(0,0,0,.25));animation:float 4s ease-in-out infinite}
+@keyframes float{50%{transform:translateY(-12px)}}
+.slide .stag{align-self:flex-start;background:var(--yellow);color:var(--blue-d);font-weight:700;font-size:12.5px;padding:4px 12px;border-radius:999px;margin-bottom:10px}
+.slide h3{font-size:28px;font-weight:800;line-height:1.25;max-width:85%}
+.slide p{margin-top:6px;opacity:.9}
+.dots{position:absolute;bottom:18px;right:24px;display:flex;gap:6px;z-index:2}
+.dots button{width:9px;height:9px;border-radius:99px;background:rgba(255,255,255,.5);transition:.3s}
+.dots button.active{width:26px;background:var(--yellow)}
+.float-card{position:absolute;left:-28px;bottom:-26px;background:#fff;color:var(--ink);border-radius:18px;padding:12px 16px;box-shadow:0 20px 40px rgba(0,0,0,.2);display:flex;gap:12px;align-items:center;max-width:300px;cursor:pointer;z-index:3}
+.float-card .fi{width:44px;height:44px;border-radius:12px;background:#FEF2F2;display:grid;place-items:center;font-size:22px;flex-shrink:0}
+.float-card small{color:var(--red);font-weight:600;font-size:12px}
+.float-card b{display:block;font-size:13.5px;line-height:1.3}
+
+/* ---------- Shortcuts ---------- */
+.shortcuts{margin-top:-44px;position:relative;z-index:5}
+.sc-box{background:#fff;border-radius:22px;box-shadow:var(--shadow);padding:18px;display:grid;grid-template-columns:repeat(8,1fr);gap:8px;border:1px solid var(--line)}
+.sc{display:flex;flex-direction:column;align-items:center;gap:6px;padding:10px 4px;border-radius:14px;font-size:13px;font-weight:500;transition:.2s}
+.sc span{width:52px;height:52px;border-radius:16px;background:var(--blue-l);display:grid;place-items:center;font-size:24px;transition:.2s}
+.sc:hover span{background:var(--yellow);transform:translateY(-3px) rotate(-5deg)}
+
+/* ---------- Section ---------- */
+.section{padding:72px 0}
+.sec-head{display:flex;justify-content:space-between;align-items:flex-end;gap:20px;margin-bottom:28px;flex-wrap:wrap}
+.eyebrow{display:inline-block;font-size:12px;font-weight:700;letter-spacing:1.5px;color:var(--blue-ink);background:var(--blue-l);padding:4px 12px;border-radius:999px}
+.sec-head h2,.m-title{font-size:30px;font-weight:800;margin:10px 0 4px;color:var(--blue-d);line-height:1.3}
+.sec-head p{color:var(--muted)}
+.link-more{color:var(--blue-ink);font-weight:600;display:inline-flex;gap:6px;align-items:center}
+.link-more:hover{gap:10px}
+
+/* ---------- Calendar ---------- */
+.cal-wrap{display:grid;grid-template-columns:250px 1fr;gap:22px;background:#fff;border-radius:26px;box-shadow:var(--shadow);padding:22px;border:1px solid var(--line)}
+.cal-side{display:flex;flex-direction:column;gap:18px}
+.side-block h4{font-size:13px;font-weight:600;margin-bottom:6px;color:var(--blue-d);text-transform:uppercase;letter-spacing:.3px}
+.chk{display:flex;align-items:center;gap:10px;padding:6px 8px;border-radius:8px;font-size:13.5px;cursor:pointer;user-select:none}
+.chk:hover{background:var(--bg)}
+.chk input{width:16px;height:16px;accent-color:var(--c);cursor:pointer}
+.chk .sw{width:10px;height:10px;border-radius:3px;background:var(--c);margin-left:auto}
+.side-dl{background:var(--yellow-l);border-radius:16px;padding:12px}
+.dl-item{display:flex;gap:10px;padding:7px;border-radius:12px;cursor:pointer;align-items:center}
+.dl-item:hover{background:#fff}
+.dl-date{width:40px;text-align:center;background:#fff;border-radius:10px;padding:4px 0;flex-shrink:0}
+.dl-date b{display:block;font-size:17px;line-height:1.1;color:var(--blue-d)}
+.dl-date small{font-size:10.5px;color:#8A6D00}
+.dl-name{font-size:12.5px;font-weight:500;line-height:1.3}
+.dl-left{font-size:11px;color:var(--red);font-weight:600}
+.cal-toolbar{display:flex;align-items:center;gap:8px;margin-bottom:12px;flex-wrap:wrap}
+.tb-btn{height:38px;padding:0 18px;border:1px solid var(--line);border-radius:999px;font-weight:500;background:#fff}
+.tb-btn:hover{background:var(--blue-l)}
+.tb-ico{width:38px;height:38px;border-radius:50%;font-size:22px;color:var(--blue-d)}
+.tb-ico:hover{background:var(--blue-l)}
+.cal-title{font-size:20px;font-weight:700;color:var(--blue-d);margin:0 6px}
+.cal-count{background:var(--yellow);color:var(--blue-d);font-weight:600;font-size:12px;padding:4px 12px;border-radius:999px}
+.view-toggle{margin-left:auto;display:flex;background:#EDF2F7;border-radius:999px;padding:4px}
+.view-toggle button{padding:6px 16px;border-radius:999px;font-size:13.5px;font-weight:500;color:var(--muted)}
+.view-toggle button.active{background:#fff;color:var(--blue-ink);box-shadow:0 2px 6px rgba(0,0,0,.08)}
+.legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--muted);margin-bottom:12px}
+.legend span{display:flex;align-items:center;gap:6px}
+.legend i{width:20px;height:12px;border-radius:4px;display:inline-block}
+.cal-grid{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));border:1px solid var(--line);border-radius:16px;overflow:hidden}
+.cal-dow{background:var(--bg);text-align:center;font-size:12px;font-weight:600;color:var(--muted);padding:8px 0;border-bottom:1px solid var(--line)}
+.cal-cell{min-height:120px;border-right:1px solid var(--line);border-bottom:1px solid var(--line);padding:5px;display:flex;flex-direction:column;gap:3px;min-width:0}
+.cal-cell:nth-child(7n){border-right:none}
+.cal-cell.other{background:#FAFAFA}
+.cal-cell.other .dnum{color:#CBD5E1}
+.cal-cell.other .chip{opacity:.5}
+.dnum{font-size:12px;font-weight:600;width:24px;height:24px;display:grid;place-items:center;border-radius:50%;align-self:center;flex-shrink:0}
+.cal-cell.today{background:var(--yellow-l)}
+.cal-cell.today .dnum{background:var(--blue);color:#fff}
+.chip{display:block;width:100%;text-align:left;font-size:11px;padding:3px 6px;border-radius:6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;line-height:1.4;transition:.15s;flex-shrink:0}
+.chip.k-camp{background:var(--c);color:#fff;font-weight:500}
+.chip.k-open{background:#ECFDF5;color:#047857}
+.chip.k-close{background:#FEF2F2;color:#BE123C;font-weight:500}
+.chip .dot{display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--c);margin-right:4px;vertical-align:1px}
+.chip:hover{filter:brightness(.94);transform:translateX(2px)}
+.more{font-size:11px;color:var(--blue-ink);font-weight:600;text-align:left;padding:2px 6px;border-radius:6px}
+.more:hover{background:var(--blue-l)}
+.cal-main{display:flex;flex-direction:column;min-width:0}
+.cal-grid.week{flex:1;grid-auto-rows:1fr}
+.cal-grid.week .cal-cell{min-height:340px;padding:8px 6px}
+.cal-grid.week .chip{white-space:normal;line-height:1.35;padding:5px 7px;font-size:12px}
+.cl-items{display:flex;flex-direction:column;gap:6px}
+.cl-items .chip{font-size:13.5px;padding:7px 10px;border-radius:8px}
+
+/* ---------- Covers / cards ---------- */
+.cover{position:relative;aspect-ratio:16/10;display:grid;place-items:center;overflow:hidden}
+.cover .emo{font-size:80px;filter:drop-shadow(0 12px 20px rgba(0,0,0,.2));z-index:1;transition:.3s}
+.cover::before{content:'';position:absolute;width:230px;height:230px;border-radius:50%;background:rgba(255,255,255,.15);top:-70px;left:-60px}
+.cover::after{content:'';position:absolute;width:170px;height:170px;border-radius:50%;border:18px solid rgba(255,255,255,.12);bottom:-60px;right:18%}
+.ribbon{position:absolute;top:24px;right:-46px;width:180px;transform:rotate(45deg);background:var(--yellow);color:var(--blue-d);text-align:center;font-weight:800;font-size:12.5px;letter-spacing:1.5px;padding:5px 0;box-shadow:0 4px 12px rgba(0,0,0,.25);z-index:2}
+.badge{display:inline-block;font-size:11.5px;padding:3px 10px;border-radius:999px;background:var(--blue-l);color:var(--blue-ink);font-weight:500}
+.badge.free{background:#DCFCE7;color:#15803D}
+.badge.y{background:var(--yellow-l);color:#8A6D00}
+.badge.red{background:#FEF2F2;color:var(--red)}
+.badge.gray{background:#F1F5F9;color:var(--muted)}
+.tags{display:flex;flex-wrap:wrap;gap:4px;margin-top:6px}
+.tag{font-size:11px;padding:2px 8px;border-radius:999px;background:#F1F5F9;color:var(--muted)}
+.tag.match{background:var(--yellow);color:var(--blue-d);font-weight:600}
+
+/* ---------- Must-go ---------- */
+.mustgo{background:linear-gradient(180deg,var(--bg),var(--blue-l))}
+.carousel{position:relative}
+.track{display:flex;gap:24px;overflow-x:auto;scroll-snap-type:x mandatory;scroll-behavior:smooth;padding:8px 4px 24px;scrollbar-width:none}
+.track::-webkit-scrollbar{display:none}
+.mg-card{flex:0 0 calc((100% - 48px)/3);scroll-snap-align:start;background:#fff;border-radius:22px;overflow:hidden;box-shadow:var(--shadow);cursor:pointer;transition:.25s}
+.mg-card:hover{transform:translateY(-6px);box-shadow:0 20px 40px rgba(21,60,100,.14)}
+.mg-card:hover .emo{transform:scale(1.1) rotate(-6deg)}
+.mg-body{padding:18px 20px 20px}
+.mg-sub{font-size:12px;font-weight:600}
+.mg-body h3{font-size:17px;font-weight:700;line-height:1.35;color:var(--blue-d);margin-top:2px}
+.senior{margin-top:12px;display:flex;align-items:center;gap:8px;font-size:12.5px;color:#7A5500;background:var(--yellow-l);padding:8px 12px;border-radius:12px}
+.car-btn{position:absolute;top:32%;width:50px;height:50px;border-radius:50%;background:#fff;box-shadow:var(--shadow);font-size:24px;color:var(--blue-ink);z-index:3;transition:.2s}
+.car-btn:hover{background:var(--yellow);color:var(--blue-d)}
+.car-btn.prev{left:-22px}.car-btn.next{right:-22px}
+.car-foot{display:flex;justify-content:space-between;align-items:center;gap:20px}
+.progress{flex:1;max-width:280px;height:6px;background:#CBD5E1;border-radius:99px;overflow:hidden}
+.progress i{display:block;height:100%;background:var(--blue);border-radius:99px;transition:width .3s}
+
+/* ---------- Finder ---------- */
+.finder{background:#fff;border-radius:28px;padding:38px;box-shadow:var(--shadow);border:1px solid var(--line);position:relative;overflow:hidden}
+.finder::before{content:'?';position:absolute;right:30px;top:-40px;font-size:220px;font-weight:800;color:var(--yellow-l);line-height:1}
+.finder .sec-head{position:relative}
+.interest-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:6px 0 26px;position:relative}
+.int{display:flex;align-items:center;gap:12px;padding:12px 14px;border:2px solid var(--line);border-radius:16px;background:#fff;font-weight:500;font-size:14px;text-align:left;transition:.2s}
+.int:hover{border-color:#8FD0FF}
+.int .ie{font-size:22px;width:42px;height:42px;border-radius:12px;background:var(--bg);display:grid;place-items:center;flex-shrink:0;transition:.2s}
+.int.on{border-color:var(--blue);background:var(--blue-l);color:var(--blue-d)}
+.int.on .ie{background:var(--yellow)}
+.int .ck{margin-left:auto;width:20px;height:20px;border-radius:50%;border:2px solid var(--line);display:grid;place-items:center;font-size:11px;color:transparent;flex-shrink:0}
+.int.on .ck{background:var(--blue);border-color:var(--blue);color:#fff}
+.result-head{display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;gap:12px;flex-wrap:wrap}
+.result-head h3{font-size:17px;color:var(--blue-d)}
+.fac-hint{font-size:13px;color:var(--muted)}
+.fac-hint b{color:var(--blue-ink)}
+.mini-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:14px}
+.mini{display:flex;gap:14px;padding:12px;border-radius:16px;border:1px solid var(--line);cursor:pointer;background:#fff;align-items:flex-start;transition:.2s}
+.mini:hover{border-color:var(--blue);box-shadow:var(--shadow);transform:translateY(-2px)}
+.mini .thumb{width:68px;height:68px;border-radius:14px;display:grid;place-items:center;font-size:32px;flex-shrink:0}
+.mini h4{font-size:14px;line-height:1.35;color:var(--blue-d)}
+.mini .meta{font-size:11.5px;color:var(--muted)}
+
+/* ---------- Closing soon ---------- */
+.dl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.card{background:#fff;border-radius:20px;overflow:hidden;box-shadow:var(--shadow);display:flex;flex-direction:column;cursor:pointer;transition:.25s;border:1px solid var(--line)}
+.card:hover{transform:translateY(-5px)}
+.card .cover{aspect-ratio:16/9}
+.card .cover .emo{font-size:60px}
+.countdown{position:absolute;top:12px;left:12px;background:var(--red);color:#fff;font-size:12px;font-weight:600;padding:4px 10px;border-radius:999px;z-index:2;box-shadow:0 4px 10px rgba(239,68,68,.35)}
+.card-body{padding:16px;display:flex;flex-direction:column;gap:6px;flex:1}
+.card-org{font-size:12px;color:var(--muted)}
+.card h3{font-size:15.5px;line-height:1.35;color:var(--blue-d)}
+.card-date{font-size:12.5px;color:var(--muted)}
+.card-meta{display:flex;flex-wrap:wrap;gap:6px;margin-top:auto;padding-top:8px}
+
+/* ---------- Reviews / Articles ---------- */
+.rv-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.review{background:#fff;border-radius:22px;padding:22px;box-shadow:var(--shadow);border:1px solid var(--line);display:flex;flex-direction:column;gap:12px;cursor:pointer;position:relative}
+.review::before{content:'“';position:absolute;right:20px;top:-6px;font-size:90px;color:var(--yellow);font-weight:800;line-height:1}
+.rv-camp{display:flex;gap:10px;align-items:center}
+.rv-camp .thumb{width:44px;height:44px;border-radius:12px;display:grid;place-items:center;font-size:20px}
+.rv-camp b{font-size:14px;color:var(--blue-d);display:block;line-height:1.3}
+.stars{color:#F59E0B;letter-spacing:2px}
+.review p{font-size:14px;color:#334155}
+.rv-who{font-size:12.5px;color:var(--muted);margin-top:auto;display:flex;justify-content:space-between;align-items:center}
+.ar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.article{background:#fff;border-radius:20px;overflow:hidden;border:1px solid var(--line);cursor:pointer;transition:.25s}
+.article:hover{transform:translateY(-4px);box-shadow:var(--shadow)}
+.ar-cover{aspect-ratio:16/9;display:grid;place-items:center;font-size:52px}
+.ar-body{padding:16px}
+.ar-body small{color:var(--blue-ink);font-weight:600;font-size:11.5px}
+.ar-body h3{font-size:15px;line-height:1.4;margin:4px 0;color:var(--blue-d)}
+.ar-body p{font-size:12.5px;color:var(--muted)}
+
+/* ---------- CTA / Ad / Footer ---------- */
+.cta{background:var(--yellow);border-radius:28px;padding:40px 44px;display:flex;align-items:center;justify-content:space-between;gap:24px;position:relative;overflow:hidden}
+.cta::after{content:'🏕️';position:absolute;right:240px;bottom:-30px;font-size:150px;opacity:.18}
+.cta h2{font-size:28px;font-weight:800;color:var(--blue-d);line-height:1.3}
+.cta p{color:#644800;margin-top:6px}
+.cta .btn-blue{height:52px;padding:0 30px;font-size:15.5px;position:relative;z-index:1}
+.ads{display:grid;grid-template-columns:2fr 1fr;gap:20px;padding-bottom:56px}
+.ad{border-radius:22px;color:#fff;padding:26px 30px;display:flex;align-items:center;gap:22px;position:relative;overflow:hidden;min-height:150px}
+.ad-label{position:absolute;top:10px;right:14px;font-size:10px;background:rgba(255,255,255,.2);padding:2px 8px;border-radius:4px;letter-spacing:1px}
+.ad .ad-emo{font-size:60px;flex-shrink:0}
+.ad h3{font-size:20px;font-weight:700;line-height:1.3}
+.ad p{font-size:13.5px;opacity:.9;margin:4px 0 12px}
+.ad .btn{height:38px;font-size:13.5px}
+footer{background:var(--blue-d);color:#94A3B8;padding:56px 0 24px;font-size:13.5px}
+.ft-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1.3fr;gap:36px}
+footer h4{color:#fff;font-size:14.5px;margin-bottom:12px}
+footer ul{list-style:none;display:flex;flex-direction:column;gap:8px}
+footer a:hover{color:var(--yellow)}
+footer img.ft-logo{height:50px;width:auto;margin-bottom:12px;background:#fff;padding:8px 18px;border-radius:999px}
+.nl{display:flex;background:rgba(255,255,255,.08);border-radius:999px;padding:5px;margin-top:10px}
+.nl input{flex:1;background:none;border:none;outline:none;color:#fff;padding:0 14px;font-family:inherit;min-width:0}
+.nl input::placeholder{color:#64748B}
+.nl .btn{height:38px;font-size:13.5px;padding:0 16px}
+.ft-bottom{border-top:1px solid rgba(255,255,255,.1);margin-top:40px;padding-top:20px;display:flex;justify-content:space-between;font-size:12.5px;flex-wrap:wrap;gap:10px}
+
+/* ---------- Modal / Toast ---------- */
+.modal{position:fixed;inset:0;background:rgba(21,60,100,.5);backdrop-filter:blur(4px);display:none;align-items:center;justify-content:center;z-index:100;padding:20px}
+.modal.show{display:flex}
+.modal-box{background:#fff;border-radius:24px;max-width:680px;width:100%;max-height:90vh;overflow:auto;position:relative;animation:pop .25s ease}
+@keyframes pop{from{transform:scale(.94);opacity:0}}
+.modal-close{position:absolute;top:14px;right:14px;width:38px;height:38px;border-radius:50%;background:rgba(255,255,255,.95);font-size:16px;z-index:5;box-shadow:0 4px 10px rgba(0,0,0,.1)}
+.modal-box .cover{aspect-ratio:16/6.5}
+.m-body{padding:24px 28px 28px}
+.m-title{font-size:24px;margin:4px 0 10px}
+.badges{display:flex;flex-wrap:wrap;gap:6px}
+.info-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin:18px 0}
+.info{background:var(--bg);border-radius:14px;padding:12px 14px}
+.info small{color:var(--muted);font-size:12px;display:block}
+.info b{font-size:14px;font-weight:600}
+.m-desc{color:#334155;font-size:14px}
+.m-actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:20px}
+.list-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:14px}
+.empty{grid-column:1/-1;text-align:center;padding:30px;font-size:48px}
+.empty p{font-size:14.5px;color:var(--muted);margin:6px 0 14px}
+.form-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:16px}
+.form-grid label{font-size:12.5px;font-weight:500;display:flex;flex-direction:column;gap:4px}
+.form-grid .full{grid-column:1/-1}
+.form-grid input,.form-grid select,.form-grid textarea{border:1.5px solid var(--line);border-radius:12px;padding:10px 12px;font-family:inherit;font-size:13.5px;outline:none}
+.form-grid input:focus,.form-grid select:focus,.form-grid textarea:focus{border-color:var(--blue)}
+.toast{position:fixed;bottom:24px;left:50%;transform:translate(-50%,120px);background:var(--blue-d);color:#fff;padding:12px 22px;border-radius:999px;font-size:14px;z-index:200;transition:.35s;box-shadow:0 10px 30px rgba(0,0,0,.25)}
+.toast.show{transform:translate(-50%,0)}
+
+/* ---------- Responsive ---------- */
+@media(max-width:1100px){
+  .mg-card{flex-basis:calc((100% - 24px)/2)}
+  .interest-grid{grid-template-columns:repeat(2,1fr)}
+  .dl-grid,.ar-grid{grid-template-columns:repeat(2,1fr)}
+  .mini-grid{grid-template-columns:repeat(2,1fr)}
+  .sc-box{grid-template-columns:repeat(4,1fr)}
+}
+@media(max-width:960px){
+  .burger{display:block}
+  .header-top{gap:12px}
+  .header-top .btn-yellow{display:none}
+  .navbar{display:none}
+  .navbar.open{display:block}
+  .nav{flex-direction:column;align-items:stretch;padding:8px 0 14px}
+  .nav-list{flex-direction:column}
+  .nav-link{justify-content:space-between;width:100%}
+  .nav-item.open .dd-menu{display:block;position:static;border-radius:12px;margin:0 8px 8px}
+  .nav-item.open .dd-menu.cols-2{display:grid;min-width:0}
+  .nav-cal{margin:8px 16px 0;justify-content:center}
+  .hero-in{grid-template-columns:1fr}
+  .hero h1{font-size:32px}
+  .float-card{left:12px}
+  .cal-wrap{grid-template-columns:1fr}
+  .cal-side{display:grid;grid-template-columns:1fr 1fr}
+  .side-dl{grid-column:1/-1}
+  .rv-grid{grid-template-columns:1fr}
+  .ft-grid{grid-template-columns:1fr 1fr}
+  .ads{grid-template-columns:1fr}
+  .cta{flex-direction:column;align-items:flex-start}
+}
+@media(max-width:640px){
+  .topbar-links{display:none}
+  .logo img{height:36px}
+  .hero-search{flex-wrap:wrap}
+  .hero-search select{flex:1;border-right:none;border-bottom:1px solid var(--line)}
+  .hero-search input{flex-basis:100%}
+  .hero-search .btn{width:100%}
+  .stats{gap:20px}
+  .mg-card{flex-basis:86%}
+  .car-btn{display:none}
+  .cal-cell{min-height:84px;padding:3px}
+  .cal-grid.week .cal-cell{min-height:220px}
+  .cal-grid.week .chip{font-size:10.5px}
+  .chip{font-size:9.5px;padding:2px 4px}
+  .cal-side{grid-template-columns:1fr}
+  .interest-grid,.dl-grid,.ar-grid,.mini-grid,.list-grid,.info-grid,.form-grid{grid-template-columns:1fr}
+  .sec-head h2{font-size:24px}
+  .finder{padding:24px}
+  .ft-grid{grid-template-columns:1fr}
+  .ad{flex-direction:column;align-items:flex-start}
+}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+</style>
+</head>
+<body>
+
+<!-- ===== Top bar ===== -->
+<div class="topbar"><div class="container topbar-in">
+  <span>🎓 SMP Camp by <b>Smart Math Pro</b> — รวมค่ายเข้ามหาลัยครบ อัปเดตทุกวัน</span>
+  <div class="topbar-links"><a href="#">ติดต่อลงโฆษณา</a><a href="#">นโยบายความเป็นส่วนตัว</a><a href="#">Facebook</a><a href="#">Instagram</a><a href="#">TikTok</a><a href="#">LINE OA</a></div>
+</div></div>
+
+<!-- ===== Header ===== -->
+<header class="header">
+  <div class="container header-top">
+    <a href="#" class="logo">
+      <img src="data:image/png;base64,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" alt="Smart Math Pro Logo">
+    </a>
+    <div class="search-wrap">
+      <span class="s-ico">🔍</span>
+      <input id="searchInput" placeholder="ค้นหาชื่อค่าย, มหาวิทยาลัย, คณะ..." autocomplete="off">
+      <div class="search-results" id="searchResults"></div>
+    </div>
+    <button class="btn btn-yellow" onclick="openSubmit()">＋ ส่งค่ายขึ้นเว็บไซต์</button>
+    <button class="burger" onclick="document.getElementById('navbar').classList.toggle('open')">☰</button>
+  </div>
+  <div class="navbar" id="navbar">
+    <div class="container nav">
+      <ul class="nav-list" id="navList"></ul>
+      <a href="#calendar" class="nav-cal">📅 Camp Calendar</a>
+    </div>
+  </div>
+</header>
+
+<!-- ===== Hero ===== -->
+<section class="hero">
+  <div class="container hero-in">
+    <div>
+      <span class="pill">✨ อัปเดตค่ายใหม่ทุกวัน · ส่งค่ายขึ้นเว็บฟรี</span>
+      <h1>หาค่ายที่ใช่ <span class="hl">ก่อนเข้ามหาลัย</span><br>ครบทุกคณะในที่เดียว</h1>
+      <p class="lead">รวมค่าย งานเปิดบ้าน และกิจกรรมวิชาการสำหรับน้อง ม.ปลาย พร้อมปฏิทินค่ายที่ช่วยให้ไม่พลาดวันปิดรับสมัคร</p>
+      <div class="hero-search">
+        <select id="hLine"><option value="all">ทุกสาย</option><option value="health">สายสุขภาพ</option><option value="sci">สายวิทย์</option><option value="arts">สายศิลป์</option><option value="openhouse">งานเปิดบ้าน</option></select>
+        <select id="hPrice"><option value="all">ทุกราคา</option><option value="free">ฟรี</option><option value="paid">มีค่าใช้จ่าย</option></select>
+        <input id="hQ" placeholder="ชื่อค่าย / มหาลัย / จังหวัด" onkeydown="if(event.key==='Enter')heroSearch()">
+        <button class="btn btn-yellow" onclick="heroSearch()">ค้นหา</button>
+      </div>
+      <div class="quick-tags">ยอดฮิต:
+        <button onclick="showSub('แพทย์')">#ค่ายหมอ</button>
+        <button onclick="showFree()">#ค่ายฟรี</button>
+        <button onclick="showSub('วิศวกรรม')">#ค่ายวิศวะ</button>
+        <button onclick="showType()">#OpenHouse</button>
+        <button onclick="showSMP()">#ลูกศิษย์SMP</button>
+      </div>
+      <div class="stats">
+        <div><b id="statCamps">0</b><span>ค่ายในระบบ</span></div>
+        <div><b>45+</b><span>มหาวิทยาลัย</span></div>
+        <div><b>12k+</b><span>น้อง ม.ปลายใช้งาน</span></div>
+      </div>
+    </div>
+    <div class="slider-wrap">
+      <div class="slider" id="slider">
+        <div class="slide active" style="background:linear-gradient(135deg,#FFD502,#FFA800);color:#222" onclick="location.hash='calendar'">
+          <span class="big">📅</span><span class="stag" style="background:#222;color:#FFD502">CAMP CALENDAR</span>
+          <h3 id="slide1Title">ปฏิทินค่ายเดือนนี้ อัปเดตแล้ว!</h3><p>ดูวันรับสมัคร–วันจัดค่ายครบในหน้าเดียว</p>
+        </div>
+        <div class="slide" style="background:linear-gradient(135deg,#10B981,#047857);color:#fff" onclick="showFree()">
+          <span class="big">🎁</span><span class="stag">ค่ายฟรี</span>
+          <h3 id="slide2Title">รวมค่ายฟรี ไม่เสียสักบาท</h3><p>คุณภาพแน่น ใส่พอร์ตได้จริง</p>
+        </div>
+        <div class="slide" style="background:linear-gradient(135deg,#28A8FF,#1595FE);color:#fff" onclick="openCamp(22)">
+          <span class="big">🚀</span><span class="stag">SMP EXCLUSIVE</span>
+          <h3>SMP Pre-Uni Bootcamp เปิดรับลูกศิษย์ SMP แล้ว!</h3><p>เตรียมพอร์ต + ติวเลข + แนะแนว TCAS ในวันเดียว</p>
+        </div>
+        <div class="dots" id="dots"><button class="active" onclick="event.stopPropagation();goSlide(0)"></button><button onclick="event.stopPropagation();goSlide(1)"></button><button onclick="event.stopPropagation();goSlide(2)"></button></div>
+      </div>
+      <div class="float-card" id="floatCard"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Shortcuts ===== -->
+<div class="container shortcuts">
+  <div class="sc-box">
+    <button class="sc" onclick="showSub('แพทย์')"><span>🩺</span>แพทย์</button>
+    <button class="sc" onclick="showSub('วิศวกรรม')"><span>⚙️</span>วิศวะ</button>
+    <button class="sc" onclick="showSub('คอม/ไอที')"><span>💻</span>คอม/ไอที</button>
+    <button class="sc" onclick="showSub('นิติศาสตร์')"><span>⚖️</span>นิติศาสตร์</button>
+    <button class="sc" onclick="showSub('บัญชี/บริหารธุรกิจ')"><span>📈</span>บริหาร</button>
+    <button class="sc" onclick="showSub('นิเทศ/สื่อสารมวลชน')"><span>🎬</span>นิเทศ</button>
+    <button class="sc" onclick="showSub('สถาปัตย์/ออกแบบ')"><span>📐</span>สถาปัตย์</button>
+    <button class="sc" onclick="showFree()"><span>🎁</span>ค่ายฟรี</button>
+  </div>
+</div>
+
+<!-- ===== Camp Calendar ===== -->
+<section class="section" id="calendar">
+  <div class="container">
+    <div class="sec-head">
+      <div><span class="eyebrow">CAMP CALENDAR</span><h2>เดือนนี้มีค่ายอะไรบ้าง? 📅</h2><p>ติ๊กเลือกสิ่งที่อยากดูทางซ้าย แล้วคลิกที่ชื่อค่ายเพื่อดูรายละเอียด</p></div>
+    </div>
+    <div class="cal-wrap">
+      <aside class="cal-side" id="calSide">
+        <div class="side-block"><h4>แสดงวัน</h4>
+          <label class="chk" style="--c:#1E293B"><input type="checkbox" data-f="type" value="camp" checked>วันจัดค่าย / งาน<i class="sw"></i></label>
+          <label class="chk" style="--c:#10B981"><input type="checkbox" data-f="type" value="open" checked>วันเปิดรับสมัคร<i class="sw"></i></label>
+          <label class="chk" style="--c:#EF4444"><input type="checkbox" data-f="type" value="close" checked>วันปิดรับสมัคร<i class="sw"></i></label>
+        </div>
+        <div class="side-block"><h4>ประเภทค่าย</h4>
+          <label class="chk" style="--c:#EC4899"><input type="checkbox" data-f="line" value="health" checked>สายสุขภาพ<i class="sw"></i></label>
+          <label class="chk" style="--c:#0E86EE"><input type="checkbox" data-f="line" value="sci" checked>สายวิทย์<i class="sw"></i></label>
+          <label class="chk" style="--c:#8B5CF6"><input type="checkbox" data-f="line" value="arts" checked>สายศิลป์<i class="sw"></i></label>
+          <label class="chk" style="--c:#D97706"><input type="checkbox" data-f="line" value="openhouse" checked>งานเปิดบ้าน/วิชาการ<i class="sw"></i></label>
+        </div>
+        <div class="side-block"><h4>ค่าใช้จ่าย</h4>
+          <label class="chk" style="--c:#EAB308"><input type="checkbox" data-f="price" value="free" checked>ฟรี</label>
+          <label class="chk" style="--c:#06B6D4"><input type="checkbox" data-f="price" value="paid" checked>มีค่าใช้จ่าย</label>
+        </div>
+        <div class="side-block side-dl"><h4>⏰ ใกล้ปิดรับสมัคร</h4><div id="sideDeadlines"></div></div>
+      </aside>
+      <div class="cal-main">
+        <div class="cal-toolbar">
+          <button class="tb-btn" onclick="calGo(0)">วันนี้</button>
+          <button class="tb-ico" onclick="calGo(-1)">‹</button>
+          <button class="tb-ico" onclick="calGo(1)">›</button>
+          <span class="cal-title" id="calTitle"></span>
+          <span class="cal-count" id="calCount"></span>
+          <div class="view-toggle"><button class="active" data-v="month" onclick="setView('month',this)">เดือน</button><button data-v="week" onclick="setView('week',this)">สัปดาห์</button></div>
+        </div>
+        <div class="legend">
+          <span><i style="background:linear-gradient(90deg,#EC4899,#0E86EE,#8B5CF6,#D97706)"></i>วันจัดค่าย (สีตามสาย)</span>
+          <span><i style="background:#ECFDF5;border:1px solid #10B981"></i>เปิดรับสมัคร</span>
+          <span><i style="background:#FEF2F2;border:1px solid #EF4444"></i>ปิดรับสมัคร</span>
+        </div>
+        <div class="cal-grid" id="calGrid"></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Must-go ===== -->
+<section class="section mustgo">
+  <div class="container">
+    <div class="sec-head">
+      <div><span class="eyebrow">MUST-GO CAMPS</span><h2>รุ่นพี่ที่ติดจริง มีค่ายนี้ในพอร์ต!</h2><p>ค่ายที่รุ่นพี่ SMP ไปมาแล้วและใช้ยื่นพอร์ตจนติดคณะในฝัน</p></div>
+    </div>
+    <div class="carousel" onmouseenter="mgHover=true" onmouseleave="mgHover=false">
+      <button class="car-btn prev" onclick="slideMG(-1)">‹</button>
+      <div class="track" id="mgTrack"></div>
+      <button class="car-btn next" onclick="slideMG(1)">›</button>
+    </div>
+    <div class="car-foot">
+      <div class="progress"><i id="mgProg"></i></div>
+      <button class="btn btn-blue" onclick="showList('ค่าย Must-go ทั้งหมด',camps.filter(c=>c.senior))">ดูทั้งหมด →</button>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Interest finder ===== -->
+<section class="section">
+  <div class="container">
+    <div class="finder">
+      <div class="sec-head">
+        <div><span class="eyebrow">CAMP FINDER</span><h2>ยังไม่รู้ว่าตัวเองชอบอะไรใช่ไหม? 🤔</h2><p>เลือกสิ่งที่ชอบได้หลายข้อ แล้วเราจะคัดค่ายที่ตรงกับน้องให้</p></div>
+      </div>
+      <div class="interest-grid" id="interestGrid"></div>
+      <div class="result-head">
+        <div><h3 id="resTitle"></h3><div class="fac-hint" id="facHint"></div></div>
+        <a class="link-more" href="#" id="resAll">ดูผลทั้งหมด →</a>
+      </div>
+      <div class="mini-grid" id="interestResults"></div>
+    </div>
+  </div>
+</section>
+
+<!-- ===== Closing soon ===== -->
+<section class="section" style="padding-top:0">
+  <div class="container">
+    <div class="sec-head">
+      <div><span class="eyebrow">CLOSING SOON</span><h2>ค่ายใกล้ปิดรับสมัคร 🔥</h2><p>รีบสมัครก่อนหมดเขต!</p></div>
+      <a href="#calendar" class="link-more">ดูในปฏิทิน →</a>
+    </div>
+    <div class="dl-grid" id="dlGrid"></div>
+  </div>
+</section>
+
+<!-- ===== Reviews ===== -->
+<section class="section" id="reviews" style="background:#fff">
+  <div class="container">
+    <div class="sec-head">
+      <div><span class="eyebrow">CAMP REVIEWS</span><h2>รีวิวค่ายจากรุ่นพี่ตัวจริง ⭐</h2><p>อ่านประสบการณ์จริงก่อนตัดสินใจสมัคร</p></div>
+      <a href="#" class="link-more" onclick="toast('📖 หน้ารีวิวทั้งหมด (ตัวอย่าง)');return false">ดูรีวิวทั้งหมด →</a>
+    </div>
+    <div class="rv-grid" id="rvGrid"></div>
+  </div>
+</section>
+
+<!-- ===== Articles ===== -->
+<section class="section" id="articles">
+  <div class="container">
+    <div class="sec-head">
+      <div><span class="eyebrow">CAMP 101</span><h2>รวมทุกเรื่องเกี่ยวกับค่าย 📚</h2><p>เทคนิคสมัคร เตรียมตัว และใช้ค่ายให้คุ้มกับพอร์ต</p></div>
+      <a href="#" class="link-more" onclick="toast('📚 หน้าบทความทั้งหมด (ตัวอย่าง)');return false">อ่านทั้งหมด →</a>
+    </div>
+    <div class="ar-grid" id="arGrid"></div>
+  </div>
+</section>
+
+<!-- ===== Submit CTA ===== -->
+<section class="container" style="padding-bottom:40px">
+  <div class="cta">
+    <div><h2>มีค่ายอยากประชาสัมพันธ์?</h2><p>ส่งค่ายขึ้น SMP Camp ฟรี เข้าถึงน้อง ม.ปลายกว่า 12,000 คน ตรวจสอบภายใน 24 ชม.</p></div>
+    <button class="btn btn-blue" onclick="openSubmit()">＋ ส่งค่ายขึ้นเว็บไซต์</button>
+  </div>
+</section>
+
+<!-- ===== Ads (bottom) ===== -->
+<section class="container ads">
+  <div class="ad" style="background:linear-gradient(110deg,#0E84EE,#1595FE 60%,#28A8FF)">
+    <span class="ad-label">AD</span><span class="ad-emo">📐</span>
+    <div><h3>คอร์ส TCAS คณิตศาสตร์ A-Level กับ Smart Math Pro</h3><p>เรียนสด + ออนไลน์ ลด 20% สำหรับน้องที่สมัครค่ายผ่าน SMP Camp</p><button class="btn btn-yellow" onclick="toast('📐 ไปหน้าคอร์ส (ตัวอย่าง)')">ดูคอร์สเลย</button></div>
+  </div>
+  <div class="ad" style="background:linear-gradient(135deg,#FFD502,#FFA800);color:#222">
+    <span class="ad-label" style="background:rgba(21,60,100,.15)">AD</span><span class="ad-emo">📝</span>
+    <div><h3>สอบ Mock TGAT/A-Level ฟรี!</h3><p>รู้ผลทันที พร้อมเฉลยละเอียด</p><button class="btn btn-blue" onclick="toast('📝 สมัครสอบ Mock (ตัวอย่าง)')">สมัครสอบ</button></div>
+  </div>
+</section>
+
+<!-- ===== Footer ===== -->
+<footer>
+  <div class="container">
+    <div class="ft-grid">
+      <div>
+        <img class="ft-logo" src="data:image/png;base64,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" alt="Smart Math Pro Logo">
+        <p style="margin-top:10px">แหล่งรวมค่ายเข้ามหาวิทยาลัย งานเปิดบ้าน และกิจกรรมวิชาการ เพื่อช่วยน้อง ๆ ค้นหาตัวเองและสร้างพอร์ตที่โดดเด่น</p>
+      </div>
+      <div><h4>หมวดหมู่ค่าย</h4><ul>
+        <li><a href="#" onclick="showLine('health');return false">สายสุขภาพ</a></li>
+        <li><a href="#" onclick="showLine('sci');return false">สายวิทย์</a></li>
+        <li><a href="#" onclick="showLine('arts');return false">สายศิลป์</a></li>
+        <li><a href="#" onclick="showType();return false">งานเปิดบ้าน/วิชาการ</a></li>
+        <li><a href="#" onclick="showFree();return false">ค่ายฟรี</a></li></ul></div>
+      <div><h4>เกี่ยวกับเรา</h4><ul>
+        <li><a href="#">เกี่ยวกับ SMP Camp</a></li><li><a href="#" onclick="openSubmit();return false">ส่งค่ายขึ้นเว็บไซต์</a></li>
+        <li><a href="#">ติดต่อลงโฆษณา</a></li><li><a href="#">นโยบายความเป็นส่วนตัว</a></li></ul></div>
+      <div><h4>ไม่พลาดค่ายใหม่ 💌</h4><p>รับแจ้งเตือนค่ายเปิดรับสมัครทุกสัปดาห์</p>
+        <div class="nl"><input placeholder="อีเมลของคุณ"><button class="btn btn-yellow" onclick="toast('💌 สมัครรับข่าวสารเรียบร้อย!')">ติดตาม</button></div>
+        <p style="margin-top:14px">Facebook · Instagram · TikTok · LINE OA</p></div>
+    </div>
+    <div class="ft-bottom"><span>© 2026 SMP Camp by Smart Math Pro. All rights reserved.</span><span>ข้อมูลค่ายในหน้านี้เป็นข้อมูลตัวอย่าง</span></div>
+  </div>
+</footer>
+
+<div class="modal" id="modal" onclick="if(event.target===this)closeModal()"><div class="modal-box"><button class="modal-close" onclick="closeModal()">✕</button><div id="modalBody"></div></div></div>
+<div class="toast" id="toast"></div>
+
+<script>
+/* ================= DATA ================= */
+const today=new Date();today.setHours(0,0,0,0);
+const T=n=>{const d=new Date(today);d.setDate(d.getDate()+n);return d;};
+const LINES={
+  health:{name:'สายสุขภาพ',color:'#EC4899'},sci:{name:'สายวิทย์',color:'#0E86EE'},
+  arts:{name:'สายศิลป์',color:'#8B5CF6'},openhouse:{name:'งานเปิดบ้าน/วิชาการ',color:'#D97706'}};
+const INTERESTS={hands:{n:'ชอบลงมือทำ',e:'🛠️'},speak:{n:'ชอบ Public Speaking',e:'🎤'},lab:{n:'ชอบทดลอง',e:'🧪'},nature:{n:'ชอบธรรมชาติ',e:'🌿'},
+  tech:{n:'ชอบเทคโนโลยี',e:'💻'},art:{n:'ชอบศิลปะ/ออกแบบ',e:'🎨'},help:{n:'ชอบช่วยเหลือผู้คน',e:'🤝'},logic:{n:'ชอบตัวเลข/วางแผน',e:'📊'}};
+const MENU={
+  health:['แพทย์','ทันตแพทย์','พยาบาล','เภสัช','จิตแพทย์/จิตวิทยา','สัตวแพทย์','เทคนิคการแพทย์/สหเวช','สายสุขภาพอื่นๆ'],
+  sci:['วิศวกรรม','วิทยาศาสตร์','คอม/ไอที','การบิน','สถาปัตย์/ออกแบบ','เกษตร/ประมง'],
+  arts:['นิติศาสตร์','รัฐศาสตร์','บัญชี/บริหารธุรกิจ','นิเทศ/สื่อสารมวลชน','ครู','อักษร/มนุษย์/ศิลปศาสตร์','สังคมศาสตร์','เศรษฐศาสตร์','โลจิสติกส์','สถาปัตย์/ออกแบบ','การโรงแรม/ท่องเที่ยว','ดนตรี']};
+
+const RAW=[
+ [1,'ค่ายหมอน้อย Pre-Med Camp ครั้งที่ 15','Pre-Med Camp','คณะแพทยศาสตร์ศิริราชพยาบาล ม.มหิดล','health','แพทย์','camp',1500,'ม.4-6','ศิริราช, กรุงเทพฯ',['hands','help','lab'],'🩺',['#FF9AB2','#EC4899'],-14,6,14,16,'พี่ปุณณ์ — ติดแพทย์ จุฬาฯ'],
+ [2,'ค่ายยิ้มสวย Dent Camp #9','Dent Camp','คณะทันตแพทยศาสตร์ จุฬาฯ','health','ทันตแพทย์','camp',990,'ม.5-6','จุฬาฯ, กรุงเทพฯ',['hands','help'],'🦷',['#7DD3FC','#1595FE'],-10,3,9,10],
+ [3,'ค่ายพยาบาลอาสา Nurse Junior','Nurse Junior','คณะพยาบาลศาสตร์ ม.เชียงใหม่','health','พยาบาล','camp',0,'ม.4-6','เชียงใหม่',['help','speak'],'💉',['#FBCFE8','#DB2777'],-5,12,20,21],
+ [4,'Pharma Lab Camp ค่ายเภสัชฯ ครั้งที่ 11','Pharma Lab','คณะเภสัชศาสตร์ ม.มหิดล','health','เภสัช','camp',790,'ม.4-6','ศาลายา, นครปฐม',['lab','hands'],'💊',['#A7F3D0','#10B981'],-18,1,5,6,'พี่แพรว — ติดเภสัช มหิดล'],
+ [5,'ค่ายใจดี Psych Camp','Psych Camp','คณะจิตวิทยา จุฬาฯ','health','จิตแพทย์/จิตวิทยา','camp',0,'ม.4-6','ออนไลน์ (Zoom)',['speak','help'],'🧠',['#C4B5FD','#7C3AED'],-3,16,25,26],
+ [6,'Vet Explorer ค่ายว่าที่สัตวแพทย์','Vet Explorer','คณะสัตวแพทยศาสตร์ ม.เกษตรศาสตร์','health','สัตวแพทย์','camp',1200,'ม.4-6','กำแพงแสน, นครปฐม',['nature','hands','help'],'🐾',['#FDE68A','#D97706'],-12,8,18,19,'พี่ต้นข้าว — ติดสัตวแพทย์ เกษตรฯ'],
+ [7,'Engineering Open House 2026','Eng Open House','คณะวิศวกรรมศาสตร์ จุฬาฯ','sci','วิศวกรรม','openhouse',0,'ม.4-6 / บุคคลทั่วไป','จุฬาฯ, กรุงเทพฯ',['tech','hands'],'🏛️',['#FCD34D','#EA580C'],-7,9,11,11],
+ [8,'Young Engineer Camp ครั้งที่ 20','Young Engineer','คณะวิศวกรรมศาสตร์ ม.เกษตรศาสตร์','sci','วิศวกรรม','camp',1800,'ม.4-5','บางเขน, กรุงเทพฯ',['hands','tech','lab'],'⚙️',['#8FD0FF','#1595FE'],-16,4,12,14,'พี่ภูมิ — ติดวิศวะ จุฬาฯ'],
+ [9,'Code Camp: AI for Teens','AI Code Camp','คณะเทคโนโลยีสารสนเทศ สจล.','sci','คอม/ไอที','camp',0,'ม.4-6','ลาดกระบัง, กรุงเทพฯ',['tech','art','logic'],'💻',['#67E8F9','#0891B2'],-2,14,22,23,'พี่โอ๊ต — ติดวิศวะคอม ลาดกระบัง'],
+ [10,'Sky Dream Aviation Camp','Aviation Camp','สถาบันการบินพลเรือน','sci','การบิน','camp',2500,'ม.4-6','ดอนเมือง, กรุงเทพฯ',['tech','hands'],'✈️',['#BAE6FD','#0284C7'],0,19,30,31],
+ [11,'ค่ายเกษตรรักษ์โลก Agri-Nature','Agri-Nature','คณะเกษตร ม.ขอนแก่น','sci','เกษตร/ประมง','camp',0,'ม.4-6','ขอนแก่น',['nature','hands','lab'],'🌱',['#BBF7D0','#16A34A'],-9,2,7,8],
+ [12,'Science Discovery ค่ายนักวิทย์รุ่นเยาว์','Sci Discovery','คณะวิทยาศาสตร์ ม.มหิดล','sci','วิทยาศาสตร์','camp',500,'ม.4-6','พญาไท, กรุงเทพฯ',['lab','nature'],'🔬',['#A5B4FC','#4F46E5'],-20,-1,3,4],
+ [13,'Law Camp ตามล่าความจริง ครั้งที่ 8','Law Camp','คณะนิติศาสตร์ ม.ธรรมศาสตร์','arts','นิติศาสตร์','camp',650,'ม.4-6','ท่าพระจันทร์, กรุงเทพฯ',['speak','logic'],'⚖️',['#D8B4FE','#9333EA'],-11,5,13,14,'พี่มายด์ — ติดนิติ ธรรมศาสตร์'],
+ [14,'Decoding Gen Z — ค่ายนิเทศฯ','Comm Arts Camp','คณะนิเทศศาสตร์ จุฬาฯ','arts','นิเทศ/สื่อสารมวลชน','camp',0,'ม.4-6','จุฬาฯ, กรุงเทพฯ',['art','speak','tech'],'🎬',['#FDA4AF','#EF4444'],-6,10,17,17],
+ [15,'Biz Startup Camp ปั้นธุรกิจใน 2 วัน','Biz Startup','คณะพาณิชยศาสตร์และการบัญชี จุฬาฯ','arts','บัญชี/บริหารธุรกิจ','camp',1200,'ม.4-6','จุฬาฯ, กรุงเทพฯ',['logic','speak'],'📈',['#FDE047','#CA8A04'],-13,7,15,16,'พี่เจ — ติด BBA จุฬาฯ'],
+ [16,'Arch Design Camp ค่ายสถาปัตย์','Arch Camp','คณะสถาปัตยกรรมศาสตร์ ม.ศิลปากร','sci','สถาปัตย์/ออกแบบ','camp',1500,'ม.4-6','วังท่าพระ, กรุงเทพฯ',['art','hands'],'📐',['#FED7AA','#C2410C'],-4,13,21,22],
+ [17,'ค่ายครูในฝัน Dream Teacher','Teacher Camp','คณะครุศาสตร์ จุฬาฯ','arts','ครู','camp',0,'ม.4-6','จุฬาฯ, กรุงเทพฯ',['speak','help'],'📚',['#99F6E4','#0D9488'],-1,15,24,25],
+ [18,'Arts Open House คณะอักษรศาสตร์','Arts Open House','คณะอักษรศาสตร์ จุฬาฯ','arts','อักษร/มนุษย์/ศิลปศาสตร์','openhouse',0,'ม.4-6 / บุคคลทั่วไป','จุฬาฯ, กรุงเทพฯ',['speak','art'],'📖',['#FDE68A','#D97706'],-10,-1,1,1],
+ [19,'Medical Open House 2026','Med Open House','คณะแพทยศาสตร์ ม.ขอนแก่น','health','แพทย์','openhouse',0,'ม.4-6 / ผู้ปกครอง','ขอนแก่น',['help','lab'],'🏥',['#FECACA','#EA580C'],-2,18,20,20],
+ [20,'Music Camp ค่ายดนตรีฤดูร้อน','Music Camp','วิทยาลัยดุริยางคศิลป์ ม.มหิดล','arts','ดนตรี','camp',900,'ม.4-6','ศาลายา, นครปฐม',['art','speak'],'🎵',['#F0ABFC','#C026D3'],1,20,27,28],
+ [21,'Hotel & Tourism Camp','Hotel Camp','คณะการท่องเที่ยวและการโรงแรม ม.ศรีนครินทรวิโรฒ','arts','การโรงแรม/ท่องเที่ยว','camp',590,'ม.4-6','กรุงเทพฯ',['speak','help'],'🏨',['#A5F3FC','#00B4D8'],2,21,28,29],
+ [22,'SMP Pre-Uni Bootcamp 2026','SMP Bootcamp','Smart Math Pro','sci','ทุกคณะ','camp',0,'ลูกศิษย์ SMP ม.4-6','SMP สาขาสยาม, กรุงเทพฯ',['logic','speak','tech'],'🚀',['#60A5FA','#1595FE'],-6,11,19,19,null,true],
+ [23,'Econ Camp เศรษฐศาสตร์น่ารู้','Econ Camp','คณะเศรษฐศาสตร์ ม.ธรรมศาสตร์','arts','เศรษฐศาสตร์','camp',0,'ม.4-6','ท่าพระจันทร์, กรุงเทพฯ',['logic','speak'],'💹',['#BEF264','#65A30D'],-30,-15,-8,-7],
+ [24,'Model UN Camp ค่ายรัฐศาสตร์','Model UN','คณะรัฐศาสตร์ จุฬาฯ','arts','รัฐศาสตร์','camp',450,'ม.4-6','จุฬาฯ, กรุงเทพฯ',['speak','help','logic'],'🌏',['#8FD0FF','#7C3AED'],-25,-10,-5,-4,'พี่ฟ้า — ติดรัฐศาสตร์ จุฬาฯ'],
+ [25,'MedTech Lab Camp ค่ายเทคนิคการแพทย์','MedTech Lab','คณะเทคนิคการแพทย์ ม.มหิดล','health','เทคนิคการแพทย์/สหเวช','camp',690,'ม.4-6','ศาลายา, นครปฐม',['lab','help'],'🧫',['#FBCFE8','#DB2777'],-20,-6,-2,-1],
+ [26,'Logistics Game Camp','Logistics Camp','คณะโลจิสติกส์ ม.บูรพา','arts','โลจิสติกส์','camp',0,'ม.4-6','ชลบุรี',['logic','tech'],'🚚',['#FDBA74','#C2410C'],3,22,30,30,null,true],
+ [27,'ค่ายสาธารณสุขรักษ์ชุมชน','Public Health Camp','คณะสาธารณสุขศาสตร์ ม.มหิดล','health','สายสุขภาพอื่นๆ','camp',0,'ม.4-6','ราชเทวี, กรุงเทพฯ',['help','nature'],'🌿',['#86EFAC','#059669'],-8,9,16,17],
+ [28,'Social Lab ค่ายสังคมศาสตร์','Social Lab','คณะสังคมศาสตร์ ม.เกษตรศาสตร์','arts','สังคมศาสตร์','camp',300,'ม.4-6','บางเขน, กรุงเทพฯ',['speak','help','logic'],'🤝',['#C7D2FE','#6366F1'],-4,17,26,26]
+];
+const camps=RAW.map(r=>({id:r[0],name:r[1],short:r[2],org:r[3],line:r[4],sub:r[5],type:r[6],price:r[7],level:r[8],loc:r[9],tags:r[10],emo:r[11],g:r[12],
+  ro:T(r[13]),rc:T(r[14]),s:T(r[15]),e:T(r[16]),senior:r[17]||null,smp:!!r[18]}));
+
+const REVIEWS=[
+ {id:1,who:'น้องใบเตย ม.6',stars:5,res:'ติดแพทย์ มหิดล',text:'ได้ลองฝึกเย็บแผลกับทำ CPR จริง พี่ ๆ ใส่ใจมาก กลับมาคือมั่นใจเลยว่าอยากเป็นหมอ ตอนสัมภาษณ์กรรมการถามถึงค่ายนี้ด้วย!'},
+ {id:8,who:'น้องกันต์ ม.5',stars:5,res:'กำลังเตรียมยื่นวิศวะ',text:'ได้สร้างหุ่นยนต์แข่งกับเพื่อนต่างโรงเรียน 3 วันเต็ม เหนื่อยแต่สนุกมาก ได้เพื่อนใหม่และรู้ว่าตัวเองชอบสาขาไฟฟ้า'},
+ {id:13,who:'น้องพลอย ม.6',stars:4,res:'ติดนิติ ธรรมศาสตร์',text:'ศาลจำลองสนุกสุด ๆ ได้ฝึกพูดและคิดเป็นเหตุผล พี่สตาฟเป็นกันเอง แต่กิจกรรมค่อนข้างแน่น ควรพักผ่อนให้พอก่อนไปนะ'}];
+const ARTICLES=[
+ ['📝','#FFFBEB','เทคนิคสมัคร','5 ขั้นตอนเขียนใบสมัครค่ายให้ผ่านรอบคัดเลือก','ตอบคำถามแบบที่รุ่นพี่สตาฟอยากอ่าน','5 นาที'],
+ ['📂','#F0F5FF','พอร์ตโฟลิโอ','ค่ายแบบไหนช่วยพอร์ต TCAS ได้จริง?','วิธีเลือกค่ายให้ตรงคณะและเล่าในพอร์ตให้ปัง','7 นาที'],
+ ['🎒','#DCFCE7','เตรียมตัว','เช็กลิสต์ของที่ต้องเตรียมไปค่ายค้างคืน','ครบทุกอย่าง ไม่ลืมแม้แต่ยาประจำตัว','4 นาที'],
+ ['💸','#FEF2F2','ค่ายฟรี','รวมค่ายฟรีที่คุณภาพไม่แพ้ค่ายเสียเงิน','อัปเดตทุกเดือนจากทีม SMP Camp','6 นาที']];
+
+/* ================= HELPERS ================= */
+const TH_M=['มกราคม','กุมภาพันธ์','มีนาคม','เมษายน','พฤษภาคม','มิถุนายน','กรกฎาคม','สิงหาคม','กันยายน','ตุลาคม','พฤศจิกายน','ธันวาคม'];
+const TH_MS=['ม.ค.','ก.พ.','มี.ค.','เม.ย.','พ.ค.','มิ.ย.','ก.ค.','ส.ค.','ก.ย.','ต.ค.','พ.ย.','ธ.ค.'];
+const TH_D=['อา.','จ.','อ.','พ.','พฤ.','ศ.','ส.'];
+const $=id=>document.getElementById(id);
+const esc=s=>s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
+const byId=id=>camps.find(c=>c.id===id);
+const lineKey=c=>c.type==='openhouse'?'openhouse':c.line;
+const colorOf=c=>LINES[lineKey(c)].color;
+const fmt=d=>`${d.getDate()} ${TH_MS[d.getMonth()]} ${String(d.getFullYear()+543).slice(2)}`;
+const range=(a,b)=>a.getTime()===b.getTime()?fmt(a):`${fmt(a)} – ${fmt(b)}`;
+const priceTxt=c=>c.price===0?'ฟรี':c.price.toLocaleString()+' บาท';
+const daysLeft=c=>Math.round((c.rc-today)/864e5);
+const grad=c=>`linear-gradient(135deg,${c.g[0]},${c.g[1]})`;
+const cover=(c,extra='')=>`<div class="cover" style="background:${grad(c)}"><span class="emo">${c.emo}</span>${extra}</div>`;
+const upcomingDeadlines=()=>camps.filter(c=>daysLeft(c)>=0).sort((a,b)=>a.rc-b.rc);
+const leftTxt=c=>{const d=daysLeft(c);return d<0?'ปิดรับแล้ว':d===0?'ปิดรับวันนี้!':`เหลือ ${d} วัน`;};
+
+/* ================= NAV ================= */
+function buildNav(){
+  const cnt=s=>camps.filter(c=>c.sub===s).length;
+  const dd=(k,label,cols)=>`<li class="nav-item"><button class="nav-link" onclick="toggleDD(this)">${label} <i class="chev"></i></button>
+    <div class="dd-menu ${cols?'cols-2':''}">${MENU[k].map(s=>`<a href="#" onclick="showSub('${s}');return false">${s}<span class="cnt">${cnt(s)}</span></a>`).join('')}</div></li>`;
+  $('navList').innerHTML=dd('health','สายสุขภาพ')+dd('sci','สายวิทย์')+dd('arts','สายศิลป์',true)+
+   `<li class="nav-item"><a class="nav-link" href="#" onclick="showType();return false">งานเปิดบ้าน/วิชาการ</a></li>
+    <li class="nav-item"><a class="nav-link" href="#reviews">รีวิวค่าย</a></li>
+    <li class="nav-item"><a class="nav-link" href="#" onclick="showFree();return false">ค่ายฟรี</a></li>
+    <li class="nav-item"><button class="nav-link" onclick="toggleDD(this)">อื่น ๆ <i class="chev"></i></button>
+      <div class="dd-menu"><a href="#" onclick="showSMP();return false">💙 ค่ายจากลูกศิษย์ SMP<span class="cnt">${camps.filter(c=>c.smp).length}</span></a>
+      <a href="#articles">📚 รวมทุกเรื่องเกี่ยวกับค่าย</a></div></li>`;
+}
+function toggleDD(btn){if(window.innerWidth<=960)btn.parentElement.classList.toggle('open');}
+function showSub(s){showList(s,camps.filter(c=>c.sub===s));}
+function showLine(l){showList(LINES[l].name,camps.filter(c=>c.line===l));}
+function showType(){showList('งานเปิดบ้าน/วิชาการ',camps.filter(c=>c.type==='openhouse'));}
+function showFree(){showList('ค่ายฟรี 🎁',camps.filter(c=>c.price===0));}
+function showSMP(){showList('ค่ายจากลูกศิษย์ SMP 💙',camps.filter(c=>c.smp));}
+
+/* ================= SEARCH ================= */
+const match=(c,q)=>(c.name+c.org+c.sub+c.loc+c.short).toLowerCase().includes(q);
+function initSearch(){
+  const si=$('searchInput'),sr=$('searchResults');
+  si.addEventListener('input',()=>{
+    const q=si.value.trim().toLowerCase();
+    if(!q){sr.classList.remove('show');return;}
+    const res=camps.filter(c=>match(c,q));
+    sr.innerHTML=res.length?res.slice(0,6).map(c=>`<div class="sr-item" onclick="openCamp(${c.id})"><div class="sr-thumb" style="background:${grad(c)}">${c.emo}</div><div><b>${c.name}</b><small>${c.org} · ${range(c.s,c.e)}</small></div></div>`).join('')
+      +`<div class="sr-all" onclick="doSearch()">ดูผลทั้งหมด ${res.length} ค่ายสำหรับ “${esc(q)}” →</div>`
+      :`<div class="sr-empty">ไม่พบค่ายที่ตรงกับ “${esc(q)}” ลองค้นด้วยชื่อคณะหรือมหาวิทยาลัย</div>`;
+    sr.classList.add('show');
+  });
+  si.addEventListener('keydown',e=>{if(e.key==='Enter')doSearch();});
+  document.addEventListener('click',e=>{if(!e.target.closest('.search-wrap'))sr.classList.remove('show');});
+}
+function doSearch(){const q=$('searchInput').value.trim().toLowerCase();$('searchResults').classList.remove('show');showList(`ผลการค้นหา “${esc(q)}”`,camps.filter(c=>match(c,q)));}
+function heroSearch(){
+  const l=$('hLine').value,p=$('hPrice').value,q=$('hQ').value.trim().toLowerCase();
+  const res=camps.filter(c=>(l==='all'||lineKey(c)===l||c.line===l)&&(p==='all'||(p==='free'?c.price===0:c.price>0))&&(!q||match(c,q)));
+  showList('ผลการค้นหา'+(q?` “${esc(q)}”`:''),res);
+}
+
+/* ================= HERO ================= */
+let hs=0;
+function goSlide(i){const s=document.querySelectorAll('.slide'),d=document.querySelectorAll('#dots button');hs=(i+s.length)%s.length;
+  s.forEach((x,j)=>x.classList.toggle('active',j===hs));d.forEach((x,j)=>x.classList.toggle('active',j===hs));}
+function initHero(){
+  $('statCamps').textContent=camps.length+'+';
+  $('slide1Title').textContent=`ปฏิทินค่ายเดือน${TH_M[today.getMonth()]} อัปเดตแล้ว!`;
+  $('slide2Title').textContent=`ค่ายฟรีตอนนี้ ${camps.filter(c=>c.price===0&&daysLeft(c)>=0).length} ค่าย ไม่เสียสักบาท`;
+  const c=upcomingDeadlines()[0];
+  if(c)$('floatCard').innerHTML=`<div class="fi">⏰</div><div><small>ใกล้ปิดรับ · ${leftTxt(c)}</small><b>${c.name}</b></div>`,$('floatCard').onclick=()=>openCamp(c.id);
+  setInterval(()=>goSlide(hs+1),5000);
+}
+
+/* ================= CALENDAR ================= */
+let calView=new Date(today.getFullYear(),today.getMonth(),1),calMode='month',dayMap={};
+const dk=d=>`${d.getFullYear()}-${d.getMonth()}-${d.getDate()}`;
+function filters(){const f={type:[],line:[],price:[]};document.querySelectorAll('#calSide input[data-f]').forEach(i=>{if(i.checked)f[i.dataset.f].push(i.value);});return f;}
+function buildEvents(){
+  const f=filters(),ev=[];
+  camps.forEach(c=>{
+    if(!f.line.includes(lineKey(c))||!f.price.includes(c.price===0?'free':'paid'))return;
+    if(f.type.includes('camp'))for(let d=new Date(c.s);d<=c.e;d.setDate(d.getDate()+1))ev.push({d:new Date(d),k:'camp',c});
+    if(f.type.includes('open'))ev.push({d:c.ro,k:'open',c});
+    if(f.type.includes('close'))ev.push({d:c.rc,k:'close',c});
+  });
+  const o={close:0,camp:1,open:2};ev.sort((a,b)=>o[a.k]-o[b.k]);return ev;
+}
+function chip(e,full){
+  const c=e.c,n=full?c.name:c.short;
+  const label=e.k==='camp'?(c.type==='openhouse'?'🏛️ ':'')+n:e.k==='open'?'เปิดรับ · '+n:'ปิดรับ · '+n;
+  return `<button class="chip k-${e.k}" style="--c:${colorOf(c)}" onclick="openCamp(${c.id})" title="${c.name}">${e.k!=='camp'?'<i class="dot"></i>':''}${label}</button>`;
+}
+const weekStart=d=>new Date(d.getFullYear(),d.getMonth(),d.getDate()-d.getDay());
+function renderCal(){
+  const ev=buildEvents();dayMap={};ev.forEach(e=>(dayMap[dk(e.d)]??=[]).push(e));
+  const week=calMode==='week',cls0=['cal-grid'];if(week)cls0.push('week');$('calGrid').className=cls0.join(' ');
+  let h=week?'':TH_D.map(d=>`<div class="cal-dow">${d}</div>`).join(''),start,cells,inRange;
+  if(week){
+    start=weekStart(calView);cells=7;
+    const end=new Date(start.getFullYear(),start.getMonth(),start.getDate()+6);
+    $('calTitle').textContent=start.getMonth()===end.getMonth()
+      ?`${start.getDate()} – ${end.getDate()} ${TH_M[end.getMonth()]} ${end.getFullYear()+543}`
+      :`${start.getDate()} ${TH_MS[start.getMonth()]} – ${end.getDate()} ${TH_MS[end.getMonth()]} ${end.getFullYear()+543}`;
+    inRange=d=>d>=start&&d<=end;
+  }else{
+    const y=calView.getFullYear(),m=calView.getMonth(),sd=new Date(y,m,1).getDay(),dim=new Date(y,m+1,0).getDate();
+    $('calTitle').textContent=`${TH_M[m]} ${y+543}`;
+    cells=Math.ceil((sd+dim)/7)*7;start=new Date(y,m,1-sd);
+    inRange=d=>d.getMonth()===m&&d.getFullYear()===y;
+  }
+  const ids=new Set(ev.filter(e=>inRange(e.d)).map(e=>e.c.id));
+  $('calCount').textContent=ids.size?`${ids.size} ค่ายใน${week?'สัปดาห์':'เดือน'}นี้`:'ไม่มีค่ายตามตัวกรอง';
+  for(let i=0;i<cells;i++){
+    const d=new Date(start.getFullYear(),start.getMonth(),start.getDate()+i),list=dayMap[dk(d)]||[],cls=['cal-cell'];
+    if(!week&&d.getMonth()!==calView.getMonth())cls.push('other');if(d.getTime()===today.getTime())cls.push('today');
+    const shown=week?list:list.slice(0,3);
+    const head=week?`<span class="cal-dow" style="background:none;border:0;padding:0 0 4px">${TH_D[d.getDay()]}</span>`:'';
+    h+=`<div class="${cls.join(' ')}">${head}<span class="dnum">${d.getDate()}</span>${shown.map(e=>chip(e)).join('')}
+      ${!week&&list.length>3?`<button class="more" onclick="openDay('${dk(d)}')">+ อีก ${list.length-3} รายการ</button>`:''}</div>`;
+  }
+  $('calGrid').innerHTML=h;
+}
+function calGo(dir){
+  if(calMode==='week'){
+    calView=dir===0?weekStart(today):new Date(calView.getFullYear(),calView.getMonth(),calView.getDate()+dir*7);
+  }else{
+    calView=dir===0?new Date(today.getFullYear(),today.getMonth(),1):new Date(calView.getFullYear(),calView.getMonth()+dir,1);
+  }
+  renderCal();
+}
+function setView(v,btn){
+  if(v===calMode)return;
+  if(v==='week'){ // jump to the week of today if it is in the viewed month, otherwise the first week of that month
+    const inThis=calView.getFullYear()===today.getFullYear()&&calView.getMonth()===today.getMonth();
+    calView=weekStart(inThis?today:new Date(calView.getFullYear(),calView.getMonth(),1));
+  }else{
+    calView=new Date(calView.getFullYear(),calView.getMonth(),1);
+  }
+  calMode=v;
+  document.querySelectorAll('.view-toggle button').forEach(b=>b.classList.toggle('active',b===btn));
+  renderCal();
+}
+function openDay(k){
+  const list=dayMap[k],d=list[0].d;
+  openModal(`<div class="m-body"><span class="eyebrow">CAMP CALENDAR</span><h2 class="m-title">${TH_D[d.getDay()]} ${d.getDate()} ${TH_M[d.getMonth()]} ${d.getFullYear()+543}</h2>
+    <p class="muted">${list.length} รายการในวันนี้</p><div class="cl-items" style="margin-top:14px">${list.map(e=>chip(e,true)).join('')}</div></div>`);
+}
+function renderSideDeadlines(){
+  $('sideDeadlines').innerHTML=upcomingDeadlines().slice(0,5).map(c=>`<div class="dl-item" onclick="openCamp(${c.id})"><div class="dl-date"><b>${c.rc.getDate()}</b><small>${TH_MS[c.rc.getMonth()]}</small></div><div><div class="dl-name">${c.short}</div><div class="dl-left">${leftTxt(c)}</div></div></div>`).join('');
+}
+
+/* ================= MUST-GO ================= */
+let mgHover=false;
+function renderMustGo(){
+  $('mgTrack').innerHTML=camps.filter(c=>c.senior).map(c=>`<article class="mg-card" onclick="openCamp(${c.id})">${cover(c,'<span class="ribbon">MUST-GO</span>')}
+    <div class="mg-body"><span class="mg-sub" style="color:${colorOf(c)}">${LINES[lineKey(c)].name} · ${c.sub}</span><h3>${c.name}</h3>
+    <div class="senior">🎓 <span><b>${c.senior}</b></span></div></div></article>`).join('');
+  const t=$('mgTrack'),upd=()=>$('mgProg').style.width=((t.scrollLeft+t.clientWidth)/t.scrollWidth*100)+'%';
+  t.addEventListener('scroll',upd);upd();
+  setInterval(()=>{if(!mgHover)slideMG(1);},4500);
+}
+function slideMG(dir){
+  const t=$('mgTrack'),step=t.querySelector('.mg-card').offsetWidth+24,max=t.scrollWidth-t.clientWidth;
+  if(dir>0&&t.scrollLeft>=max-5)t.scrollTo({left:0});else if(dir<0&&t.scrollLeft<=5)t.scrollTo({left:max});else t.scrollBy({left:dir*step});
+}
+
+/* ================= FINDER ================= */
+const picked=new Set(['hands','speak']);
+function togInt(k){picked.has(k)?picked.delete(k):picked.add(k);renderFinder();}
+function miniHTML(c,sel=[]){
+  return `<div class="mini" onclick="openCamp(${c.id})"><div class="thumb" style="background:${grad(c)}">${c.emo}</div><div style="min-width:0"><h4>${c.name}</h4>
+    <div class="meta">${c.org}</div><div class="meta">📅 ${range(c.s,c.e)} · ${priceTxt(c)}</div>
+    <div class="tags">${c.tags.map(t=>`<span class="tag ${sel.includes(t)?'match':''}">${INTERESTS[t].e} ${INTERESTS[t].n}</span>`).join('')}</div></div></div>`;
+}
+function renderFinder(){
+  $('interestGrid').innerHTML=Object.entries(INTERESTS).map(([k,v])=>`<button class="int ${picked.has(k)?'on':''}" onclick="togInt('${k}')"><span class="ie">${v.e}</span>${v.n}<span class="ck">✓</span></button>`).join('');
+  const sel=[...picked];let res,title;
+  if(!sel.length){res=camps.filter(c=>c.senior);title='ยังไม่ได้เลือก — ลองดูค่ายยอดนิยมก่อนนะ';}
+  else{res=camps.map(c=>({c,s:c.tags.filter(t=>picked.has(t)).length})).filter(x=>x.s>0).sort((a,b)=>b.s-a.s||(b.c.senior?1:0)-(a.c.senior?1:0)).map(x=>x.c);
+    title=`พบ ${res.length} ค่ายที่ตรงกับความชอบของน้อง`;}
+  $('resTitle').textContent=title;
+  const subs=[...new Set(res.map(c=>c.sub).filter(s=>s!=='ทุกคณะ'))].slice(0,4);
+  $('facHint').innerHTML=sel.length&&subs.length?`คณะที่น่าจะเหมาะกับน้อง: <b>${subs.join(' · ')}</b>`:'';
+  $('interestResults').innerHTML=res.slice(0,6).map(c=>miniHTML(c,sel)).join('');
+  $('resAll').onclick=e=>{e.preventDefault();showList('ค่ายที่ตรงกับความชอบของน้อง',res,sel);};
+}
+
+/* ================= OTHER SECTIONS ================= */
+function renderDeadlines(){
+  $('dlGrid').innerHTML=upcomingDeadlines().slice(0,4).map(c=>`<div class="card" onclick="openCamp(${c.id})">${cover(c,`<span class="countdown">⏰ ${leftTxt(c)}</span>`)}
+    <div class="card-body"><div class="card-org">${c.org}</div><h3>${c.name}</h3><div class="card-date">📅 ${range(c.s,c.e)} · 📍 ${c.loc}</div>
+    <div class="card-meta"><span class="badge" style="background:${colorOf(c)}1f;color:${colorOf(c)}">${c.sub}</span><span class="badge ${c.price?'y':'free'}">${priceTxt(c)}</span><span class="badge gray">${c.level}</span></div></div></div>`).join('');
+}
+function renderReviews(){
+  $('rvGrid').innerHTML=REVIEWS.map(r=>{const c=byId(r.id);return `<div class="review" onclick="openCamp(${c.id})">
+    <div class="rv-camp"><div class="thumb" style="background:${grad(c)}">${c.emo}</div><div><b>${c.name}</b><span class="stars">${'★'.repeat(r.stars)}${'☆'.repeat(5-r.stars)}</span></div></div>
+    <p>${r.text}</p><div class="rv-who"><span>— ${r.who}</span><span class="badge y">${r.res}</span></div></div>`;}).join('');
+}
+function renderArticles(){
+  $('arGrid').innerHTML=ARTICLES.map(a=>`<div class="article" onclick="toast('📖 เปิดบทความ (ตัวอย่าง)')"><div class="ar-cover" style="background:${a[1]}">${a[0]}</div>
+    <div class="ar-body"><small>${a[2]} · อ่าน ${a[5]}</small><h3>${a[3]}</h3><p>${a[4]}</p></div></div>`).join('');
+}
+
+/* ================= MODAL ================= */
+function openModal(html){$('modalBody').innerHTML=html;$('modal').classList.add('show');document.body.style.overflow='hidden';$('modal').querySelector('.modal-box').scrollTop=0;}
+function closeModal(){$('modal').classList.remove('show');document.body.style.overflow='';}
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeModal();});
+function openCamp(id){
+  const c=byId(id),L=LINES[lineKey(c)],dl=daysLeft(c);
+  const status=dl<0?'<span class="badge gray">ปิดรับสมัครแล้ว</span>':`<span class="badge red">⏰ ${leftTxt(c)}</span>`;
+  openModal(`${cover(c,c.senior?'<span class="ribbon">MUST-GO</span>':'')}<div class="m-body">
+    <div class="card-org">${c.org}</div><h2 class="m-title">${c.name}</h2>
+    <div class="badges"><span class="badge" style="background:${L.color}1f;color:${L.color}">${L.name}</span><span class="badge">${c.sub}</span><span class="badge ${c.price?'y':'free'}">${priceTxt(c)}</span>${c.smp?'<span class="badge">💙 SMP</span>':''}${status}</div>
+    <div class="info-grid">
+      <div class="info"><small>📝 เปิดรับสมัคร</small><b>${range(c.ro,c.rc)}</b></div>
+      <div class="info"><small>🏕️ วันจัดค่าย/งาน</small><b>${range(c.s,c.e)}</b></div>
+      <div class="info"><small>🎓 ผู้สมัคร</small><b>${c.level}</b></div>
+      <div class="info"><small>📍 สถานที่</small><b>${c.loc}</b></div></div>
+    <p class="m-desc">${c.name} เปิดโอกาสให้น้อง ${c.level} ได้สัมผัสการเรียนและอาชีพด้าน${c.sub==='ทุกคณะ'?'ต่าง ๆ':c.sub} ผ่าน workshop ลงมือทำจริง พูดคุยกับรุ่นพี่และอาจารย์ พร้อมรับเกียรติบัตรสำหรับใส่ Portfolio</p>
+    ${c.senior?`<div class="senior">🎓 <span><b>${c.senior}</b> เคยไปค่ายนี้และใส่ไว้ในพอร์ต</span></div>`:''}
+    <div class="tags" style="margin-top:12px">${c.tags.map(t=>`<span class="tag">${INTERESTS[t].e} ${INTERESTS[t].n}</span>`).join('')}</div>
+    <div class="m-actions"><button class="btn btn-yellow" onclick="toast('🎉 ไปยังหน้าสมัคร ${c.short} (ตัวอย่าง)')">สมัครเลย</button>
+      <button class="btn btn-outline" onclick="toast('📅 เพิ่มลงปฏิทินแล้ว')">＋ เพิ่มลงปฏิทิน</button>
+      <button class="btn btn-ghost" onclick="toast('🔗 คัดลอกลิงก์แล้ว')">แชร์</button></div></div>`);
+}
+function showList(title,list,sel=[]){
+  openModal(`<div class="m-body"><span class="eyebrow">SMP CAMP</span><h2 class="m-title">${title}</h2><p class="muted">${list.length?`พบ ${list.length} ค่าย`:''}</p>
+    <div class="list-grid">${list.length?list.map(c=>miniHTML(c,sel)).join(''):`<div class="empty">🏕️<p>ยังไม่มีค่ายในหมวดนี้ — มีค่ายอยากแนะนำไหม?</p><button class="btn btn-yellow" onclick="openSubmit()">＋ ส่งค่ายขึ้นเว็บไซต์</button></div>`}</div></div>`);
+}
+function openSubmit(){
+  openModal(`<div class="m-body"><span class="eyebrow">SUBMIT CAMP</span><h2 class="m-title">ส่งค่ายขึ้น SMP Camp (ฟรี)</h2><p class="muted">ทีมงานจะตรวจสอบและเผยแพร่ภายใน 24 ชั่วโมง</p>
+    <form class="form-grid" onsubmit="event.preventDefault();closeModal();toast('✅ ส่งค่ายเรียบร้อย! ทีมงานจะติดต่อกลับภายใน 24 ชม.')">
+      <label class="full">ชื่อค่าย *<input required placeholder="เช่น ค่ายหมอน้อย ครั้งที่ 16"></label>
+      <label>ผู้จัด / คณะ *<input required placeholder="คณะ... มหาวิทยาลัย..."></label>
+      <label>สาย<select>${Object.values(LINES).map(l=>`<option>${l.name}</option>`).join('')}</select></label>
+      <label>วันปิดรับสมัคร *<input type="date" required></label>
+      <label>วันจัดค่าย *<input type="date" required></label>
+      <label>ค่าใช้จ่าย (บาท)<input type="number" min="0" placeholder="0 = ฟรี"></label>
+      <label>ระดับชั้นที่รับ<input placeholder="ม.4-6"></label>
+      <label class="full">ลิงก์สมัคร<input type="url" placeholder="https://..."></label>
+      <label class="full">รายละเอียดค่าย<textarea rows="3" placeholder="กิจกรรม, จำนวนรับ, สถานที่..."></textarea></label>
+      <label class="full">รูปปกค่าย<input type="file" accept="image/*"></label>
+      <div class="full"><button class="btn btn-yellow" type="submit" style="width:100%">ส่งค่าย</button></div>
+    </form></div>`);
+}
+let tt;function toast(m){const t=$('toast');t.textContent=m;t.classList.add('show');clearTimeout(tt);tt=setTimeout(()=>t.classList.remove('show'),2600);}
+
+/* ================= INIT ================= */
+buildNav();initSearch();initHero();
+document.querySelectorAll('#calSide input').forEach(i=>i.addEventListener('change',renderCal));
+renderCal();renderSideDeadlines();renderMustGo();renderFinder();renderDeadlines();renderReviews();renderArticles();
+</script>
+</body>
+</html>
